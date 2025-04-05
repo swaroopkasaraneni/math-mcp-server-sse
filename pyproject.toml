@@ -1,5 +1,5 @@
 [project]
-name = "mcp-server-math-sse"
+name = "math-mcp-server-sse"
 version = "0.1.0"
 description = "Math operations"
 readme = "README.md"
@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [project.scripts]
-mcp-server-math-sse = "mcp_server_math_sse:main"
+math-mcp-server-sse = "math_mcp_server_sse:main"
 
 [build-system]
 requires = ["hatchling"]
