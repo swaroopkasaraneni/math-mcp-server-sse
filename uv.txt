@@ -1,0 +1,24 @@
+Create a new project
+$uv init --python 3.13 my-project
+$cd my-project
+
+Add dependencies to the project
+$uv add pandas numpy
+$uv add pandas --dev 
+
+Remove dependencies from the project
+$uv remove pandas
+
+Show list of python version installed
+$uv python list
+
+
+Run a command or script
+$uv run uvicorn hello:app --port 8080 --reload
+
+
+create the project's virtual environment
+$uv sync
+
+Display the project's dependency tree
+$uv tree
