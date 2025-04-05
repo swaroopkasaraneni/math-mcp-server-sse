@@ -1,5 +1,5 @@
 [project]
-name = "math-mcp-server-sse"
+name = "math_mcp_server_sse"
 version = "0.1.0"
 description = "Math operations"
 readme = "README.md"
