@@ -1,6 +1,5 @@
 from typing import Annotated
 from mcp.server import Server
-from mcp.server.sse import sse_server
 from mcp.types import (
     ErrorData,
     GetPromptResult,
@@ -14,14 +13,20 @@ from mcp.types import (
 )
 from pydantic import BaseModel, Field
 
+from mcp.server.sse import SseServerTransport
+from starlette.applications import Starlette
+from starlette.routing import Route, Mount
+import uvicorn
+
 class MathOperation(BaseModel):
     """Parameters for math operations."""
     a: Annotated[int, Field(description="First number")]
     b: Annotated[int, Field(description="Second number")]
 
-async def serve() -> None:
+async def create_app():
     """Run the math MCP server."""
     server = Server("math-mcp")
+    sse = SseServerTransport("/messages/")
 
     @server.list_tools()
     async def list_tools() -> list[Tool]:
@@ -112,5 +117,15 @@ async def serve() -> None:
         return [TextContent(type="text", text=f"Result: {result}")]
 
     options = server.create_initialization_options()
-    await sse_server(server, options)
+    async def sse_handler(request):
+        async with sse.connect_sse(request.scope, request.receive, request._send) as (reader, writer):
+            await server.run(reader, writer, server.create_initialization_options())
 
+
+    routes = [
+        Route("/sse", endpoint=sse_handler),
+        Mount("/messages/", app=sse.handle_post_message),
+    ]
+
+    app = Starlette(routes=routes)
+    return app
