@@ -16,7 +16,7 @@ from pydantic import BaseModel, Field
 from mcp.server.sse import SseServerTransport
 from starlette.applications import Starlette
 from starlette.routing import Route, Mount
-import uvicorn
+import asyncio
 
 class MathOperation(BaseModel):
     """Parameters for math operations."""
@@ -127,5 +127,6 @@ async def create_app():
         Mount("/messages/", app=sse.handle_post_message),
     ]
 
-    app = Starlette(routes=routes)
-    return app
+    return Starlette(routes=routes)
+
+app = asyncio.run(create_app())
