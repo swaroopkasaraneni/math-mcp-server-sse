@@ -1,6 +1,6 @@
 from typing import Annotated
 from mcp.server import Server
-from mcp.server.stdio import stdio_server
+from mcp.server.sse import sse_server
 from mcp.types import (
     ErrorData,
     GetPromptResult,
@@ -112,6 +112,5 @@ async def serve() -> None:
         return [TextContent(type="text", text=f"Result: {result}")]
 
     options = server.create_initialization_options()
-    async with stdio_server() as (read_stream, write_stream):
-        await server.run(read_stream, write_stream, options, raise_exceptions=True)
+    await sse_server(server, options)
 
