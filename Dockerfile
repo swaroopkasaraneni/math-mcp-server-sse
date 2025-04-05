@@ -32,5 +32,8 @@ COPY --from=uv --chown=app:app /app/.venv /app/.venv
 # Place executables in the environment at the front of the path
 ENV PATH="/app/.venv/bin:$PATH"
 
+# Expose default SSE port (adjust if needed)
+EXPOSE 5000
+
 # when running the container, add --db-path and a bind mount to the host's db file
-ENTRYPOINT ["mcp-server-math"]
+ENTRYPOINT ["mcp-server-math-sse"]
