@@ -1,5 +1,5 @@
 startCommand:
   type: sse
   config:
-    endpoint: http://localhost:5000  # Replace with actual URL if remote
+    endpoint: http://localhost:5000  # or replace with your actual server URL
     key: 2725f133-bb11-4e38-9ea2-84cb9fcf403e
