@@ -5,9 +5,9 @@ startCommand:
   configSchema:
     # JSON Schema defining the configuration options for the MCP.
     type: object
+    required: []
     properties: {}
   commandFunction:
-    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    # A function that produces the CLI command to start the MCP on stdio.
     |-
-    (config) => ({ command: 'mcp-server-math-sse', args: [] })
-  exampleConfig: {}
+    (config) => ({command: 'mcp-server-math-sse', args: []})
