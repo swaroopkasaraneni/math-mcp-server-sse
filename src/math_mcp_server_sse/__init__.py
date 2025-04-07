@@ -1,10 +1,11 @@
 import uvicorn
 import asyncio
-
+from .server import app
 def main():
     
-    """MCP Math Server - SSE Transport Math Server"""
-    uvicorn.run("math_mcp_server_sse.server:app", host="0.0.0.0", port=5000, reload=False)
+    print("Starting MCP server 'Math' on 127.0.0.1:5000")
+        # Use this approach to keep the server running
+    app.run(ransport="sse")
 
 if __name__ == "__main__":
     main()
