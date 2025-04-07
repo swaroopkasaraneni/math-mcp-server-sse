@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
+from mcp.server.websocket import WebSocketTransport
 from contextlib import asynccontextmanager
 from mcp.server import Server
 from mcp.server.sse import SseServerTransport
@@ -105,3 +106,10 @@ async def sse_get(request: Request):
 @app.get("/tools/list")
 async def tools_list():
     return await server._handlers["list_tools"]()
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    transport = WebSocketTransport(websocket)
+    options = server.create_initialization_options()
+    await server.run(transport.reader, transport.writer, options)
