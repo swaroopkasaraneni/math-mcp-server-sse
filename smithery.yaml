@@ -1,7 +1,7 @@
 # Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
 
 startCommand:
-  type: studio
+  type: sse
   configSchema:
     # JSON Schema defining the configuration options for the MCP.
     type: object
@@ -10,4 +10,4 @@ startCommand:
   commandFunction:
     # A function that produces the CLI command to start the MCP on stdio.
     |-
-    (config) => ({command: 'mcp-server-math-sse', args: []})
+    (config) => ({command: 'math-mcp-server-sse', args: []})
