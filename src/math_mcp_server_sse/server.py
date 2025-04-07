@@ -1,4 +1,4 @@
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI, WebSocket, Request
 from mcp.server.websocket import WebSocketTransport
 from contextlib import asynccontextmanager
 from mcp.server import Server
@@ -9,10 +9,10 @@ from mcp.types import (
 )
 from pydantic import BaseModel, Field
 from typing import Annotated
-from fastapi import Request
 
 server = Server("math-mcp")
 sse = SseServerTransport("/messages/")
+tool_cache = []
 
 class MathOperation(BaseModel):
     a: Annotated[int, Field(description="First number")]
@@ -23,10 +23,12 @@ async def lifespan(app: FastAPI):
     # Register handlers here
     @server.list_tools()
     async def list_tools() -> list[Tool]:
-        return [
+        tool_cache.clear()
+        tool_cache.extend([
             Tool(name="add", description="Add two numbers", inputSchema=MathOperation.model_json_schema()),
             Tool(name="multiply", description="Multiply two numbers", inputSchema=MathOperation.model_json_schema()),
-        ]
+        ])
+        return tool_cache
 
     @server.list_prompts()
     async def list_prompts() -> list[Prompt]:
@@ -79,7 +81,7 @@ async def lifespan(app: FastAPI):
             args = MathOperation(**arguments)
         except Exception as e:
             raise ErrorData(code=INVALID_PARAMS, message=str(e))
-        
+
         if name == "add":
             result = args.a + args.b
         elif name == "multiply":
@@ -102,11 +104,12 @@ async def sse_get(request: Request):
     async with sse.connect_sse(request.scope, request.receive, request._send) as (reader, writer):
         await server.run(reader, writer, server.create_initialization_options())
 
-# Extra: HTTP GET endpoint for test harness
+# HTTP GET endpoint for tool list
 @app.get("/tools/list")
 async def tools_list():
-    return await server._handlers["list_tools"]()
+    return tool_cache
 
+# WebSocket connection endpoint
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
