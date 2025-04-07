@@ -13,7 +13,7 @@ signal.signal(signal.SIGINT, signal_handler)
 
 app = FastMCP(
     name="Math",
-    host="127.0.0.1",
+    host="0.0.0.0",
     port=5000,
     # Add this to make the server more resilient
     timeout=30  # Increase timeout to 30 seconds
