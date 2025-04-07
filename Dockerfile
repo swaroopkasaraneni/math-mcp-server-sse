@@ -35,5 +35,5 @@ ENV PATH="/app/.venv/bin:$PATH"
 # Expose default SSE port (adjust if needed)
 EXPOSE 5000
 
-# when running the container, add --db-path and a bind mount to the host's db file
-ENTRYPOINT ["math-mcp-server-sse"]
+#ENTRYPOINT ["math-mcp-server-sse"]
+CMD ["uvicorn", "math_mcp_server_sse.server:app", "--host", "0.0.0.0", "--port", "5000"]
